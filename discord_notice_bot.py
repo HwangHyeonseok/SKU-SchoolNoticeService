@@ -1,10 +1,19 @@
-# 정상 작동 확인 (20240714~20240717 정상 작동 확인)
-# undetected-chromedriver 3.0.6 버전
-# selenium 4.9 버전
+# 안정화 버전 (stable version - 20240818)
+# 실행 명령어 : pm2 start 20240810.py --interpreter python3
 
-# Google Chrome 브라우저 버전 123.0.6312.105
-# ChromeDriver 버전 123.0.6312.86
+# --------------- 필 독 ------------------
+# # 주의1 : 실행하고 종료한 경우
+# 1) xvfb-run, Xvfb, chrome, undetected_chro, python3 제거하기
+# 2) 인스턴스를 중지하고 다시 시작한다.
+# --------------------------------------
 
+# --------------- 호환 버전 확인 -------------
+# undetected-chromedriver 3.5.5 버전 (pip show undetected-chromedriver)
+# selenium 4.23.1 버전 (pip show selenium)
+
+# Google Chrome 브라우저 버전 128.0.6613.84 (google-chrome --version)
+# ChromeDriver 버전 128.0.6613.84 (cd chromedriver-linux64/ 후에 ./chromedriver --version)
+# ---------------------------------------------
 import chromedriver_autoinstaller
 import random
 import copy
@@ -135,6 +144,7 @@ def make_driver():
         options.add_argument("--headless") # GUI 없이 실행
         options.add_argument('--no-sandbox') # Browser가 보안 취약점에 노출될 가능성을 최소화하기 위해 사용되는 Sandbox 보호 기능을 해제(대신 속도 상승)
         options.add_argument('--disable-dev-shm-usage') # 공유 메모리 파일 시스템 크기를 제한하지 않게 설정하는 것
+        #options.add_argument('--disable-gpu')  # GPU 가속 비활성화 -> 메모리 문제 해결을 위해 임시사용
 
         print("여기까지완료2")
         driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options)
@@ -190,16 +200,19 @@ async def on_ready():
     global channel  # 채널 변수를 전역 변수로 설정
     print(f'Login bot: {bot.user}')
     channel = bot.get_channel(config['channel_id'])  # 채널 ID를 이용하여 채널 변수 설정
-    # if(driver == None):
-    #     await channel.send(f'driver 없음')
+    # if driver is None:
+    #     await channel.send(f'시작 시 driver 없음')
     check_notices.start()
 
 @tasks.loop(minutes=15) 
 async def check_notices():
     global homepage_num
     global attempt
+    # if driver is None: # 임시
+    #     await channel.send(f'실행 중간 driver 없음') # 임시
 
     print(f"{attempt}번째 시도 중입니다.")
+    # await channel.send(f"{attempt}번째 시도 중입니다.") # 임시
 
     for sku_site_link in sku_site_links:
         try:
@@ -208,7 +221,7 @@ async def check_notices():
             print(f"[ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 띄우지 못했습니다.")
             print(f"에러명은 아래와 같음")
             print(f"{e}")
-            #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n 에러 코드 : [ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 확인하지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
+            # await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n 에러 코드 : [ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 확인하지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
         driver.implicitly_wait(200)
 
@@ -216,7 +229,7 @@ async def check_notices():
             post_elements = driver.find_elements(By.CSS_SELECTOR, '.td-subject > a')
         except:
             print("[ERROR 002] 성결대학교 상위 10개 공지 전체 element CSS_SELECTOR 오류입니다.")
-            #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n [ERROR 002] 성결대학교 상위 10개 공지 전체 element CSS_SELECTOR 오류입니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
+            # await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n [ERROR 002] 성결대학교 상위 10개 공지 전체 element CSS_SELECTOR 오류입니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
         try:
             for post_element in post_elements:
@@ -226,7 +239,7 @@ async def check_notices():
                 cur_subjects[homepage_num].append((subject, url))
         except:
             print("[ERROR 003] 성결대학교 게시물의 제목이나 URL을 받아오지 못했습니다.")
-            #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n [ERROR 003] 성결대학교 게시물의 제목이나 URL을 받아오지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
+            # await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n [ERROR 003] 성결대학교 게시물의 제목이나 URL을 받아오지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
         # 2024-07-14 추가 : 바뀐 공지사항 갯수 확인
         different_subject_cnt = 0 
@@ -244,6 +257,8 @@ async def check_notices():
                     print(f"새로운 공지 URL : {url.strip()}")
                     await channel.send(f'새로운 공지 제목 : {subject} \n {url.strip()}')
 
+        # await channel.send(f'{cur_subjects[homepage_num]}')#임시
+        # await channel.send(f'바뀐 공지 개수 : {different_subject_cnt}') # 임시 
 
         before_subjects[homepage_num] = copy.deepcopy(cur_subjects[homepage_num])
         cur_subjects[homepage_num].clear()
@@ -253,7 +268,7 @@ async def check_notices():
             homepage_num -= 12
 
 
-        await asyncio.sleep(random.uniform(7.0, 10.0))
+        await asyncio.sleep(random.uniform(5.0, 10.0)) # 여기 조정
 
     attempt += 1
 
