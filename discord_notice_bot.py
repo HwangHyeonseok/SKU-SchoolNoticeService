@@ -1,5 +1,4 @@
 # 정상 작동 확인 (20240714~20240717 정상 작동 확인)
-# google cloud platform server 변경 - hhs0991 계정 -> hyeonseok2297 계정으로 변경
 # undetected-chromedriver 3.0.6 버전
 # selenium 4.9 버전
 
@@ -29,13 +28,11 @@ def load_config():
 config = load_config()
 
 # ========================================== 변수 ===================================================
-# 테스트 서버
 # discord_token : 디스코드 토큰
 # channel_id : 디스코드 채널 아이디
 # local_computer_user_agent_txt_path : user-agent 15000개 데이터 txt파일이 저장된 공간 (local)
 # GCP_server_computer_user_agent_txt_path : user-agent 15000개 데이터 txt파일이 저장된 공간 (GCP server)
 # chromedriver_path : chromedriver 경로
-
 
 before_subjects = [[] for _ in range(12)] # 12개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
 cur_subjects = [[] for _ in range(12)]  # 12개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
@@ -197,13 +194,12 @@ async def on_ready():
     #     await channel.send(f'driver 없음')
     check_notices.start()
 
-@tasks.loop(minutes=5) 
+@tasks.loop(minutes=15) 
 async def check_notices():
     global homepage_num
     global attempt
+
     print(f"{attempt}번째 시도 중입니다.")
-    if driver is None :
-        await channel.send(f'driver가 없어졌어요 ㅠㅠ')
 
     for sku_site_link in sku_site_links:
         try:
