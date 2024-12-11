@@ -1,13 +1,10 @@
-# 안정화 버전 (stable version - 20240818)
+# 정상 작동 확인 (20240714~20240717 정상 작동 확인)
+# google cloud platform server 변경 - hhs0991 계정 -> hyeonseok2297 계정으로 변경
+# undetected-chromedriver 3.0.6 버전
+# selenium 4.9 버전
 
-# 이걸로 되는지 체크 오늘 밤 : nohup python3 20240523.py
-
-# undetected-chromedriver 3.5.5 버전 (pip show undetected-chromedriver)
-# selenium 4.23.1 버전 (pip show selenium)
-
-# Google Chrome 브라우저 버전 127.0.6533.119
-# ChromeDriver 버전 127.0.6533.119
-
+# Google Chrome 브라우저 버전 123.0.6312.105
+# ChromeDriver 버전 123.0.6312.86
 
 import chromedriver_autoinstaller
 import random
@@ -31,7 +28,6 @@ def load_config():
 
 config = load_config()
 
-
 # ========================================== 변수 ===================================================
 # 테스트 서버
 # discord_token : 디스코드 토큰
@@ -40,25 +36,27 @@ config = load_config()
 # GCP_server_computer_user_agent_txt_path : user-agent 15000개 데이터 txt파일이 저장된 공간 (GCP server)
 # chromedriver_path : chromedriver 경로
 
-before_subjects = [[] for _ in range(14)] # 14개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
-cur_subjects = [[] for _ in range(14)]  # 14개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
+
+before_subjects = [[] for _ in range(12)] # 12개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
+cur_subjects = [[] for _ in range(12)]  # 12개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
 homepage_num = 0 # 현재 보고 있는 홈페이지 (0번이면 새소식 페이지 index)
 attempt = 1 # 전체 공지 순회 횟수
+
+# 2024-07-14 수요자의 요구사항을 반영하여 # 입찰구매정보 (9), # 새소식 (0) 은 공지 서비스를 진행하지 않는다.
 # 공지 모니터링할 성결대학교 홈페이지 URL 
-sku_site_links = ['https://www.sungkyul.ac.kr/skukr/342/subview.do', # 새소식 (0)
-            'https://www.sungkyul.ac.kr/skukr/343/subview.do', # 학사 (1)
-            'https://www.sungkyul.ac.kr/skukr/901/subview.do', # 학생 (2)
-            'https://www.sungkyul.ac.kr/skukr/344/subview.do', # 장학/등록/학자금 (3)
-            'https://www.sungkyul.ac.kr/skukr/345/subview.do', # 입학 (4)
-            'https://www.sungkyul.ac.kr/skukr/346/subview.do', # 취업/진로개발/창업 (5)
-            'https://www.sungkyul.ac.kr/skukr/347/subview.do', # 공모/행사 (6)
-            'https://www.sungkyul.ac.kr/skukr/348/subview.do', # 교육/글로벌 (7)
-            'https://www.sungkyul.ac.kr/skukr/349/subview.do', # 일반 (8)
-            'https://www.sungkyul.ac.kr/skukr/350/subview.do', # 입찰구매정보 (9)
-            'https://www.sungkyul.ac.kr/skukr/351/subview.do', # 사회봉사센터 (10)
-            'https://www.sungkyul.ac.kr/skukr/352/subview.do', # 장애학생지원센터 (11)
-            'https://www.sungkyul.ac.kr/skukr/353/subview.do', # 생활관 (12)
-            'https://www.sungkyul.ac.kr/skukr/354/subview.do', # 비교과 (13)
+sku_site_links = [
+            'https://www.sungkyul.ac.kr/skukr/343/subview.do', # 학사 (0)
+            'https://www.sungkyul.ac.kr/skukr/901/subview.do', # 학생 (1)
+            'https://www.sungkyul.ac.kr/skukr/344/subview.do', # 장학/등록/학자금 (2)
+            'https://www.sungkyul.ac.kr/skukr/345/subview.do', # 입학 (3)
+            'https://www.sungkyul.ac.kr/skukr/346/subview.do', # 취업/진로개발/창업 (4)
+            'https://www.sungkyul.ac.kr/skukr/347/subview.do', # 공모/행사 (5)
+            'https://www.sungkyul.ac.kr/skukr/348/subview.do', # 교육/글로벌 (6)
+            'https://www.sungkyul.ac.kr/skukr/349/subview.do', # 일반 (7)
+            'https://www.sungkyul.ac.kr/skukr/351/subview.do', # 사회봉사센터 (8)
+            'https://www.sungkyul.ac.kr/skukr/352/subview.do', # 장애학생지원센터 (9)
+            'https://www.sungkyul.ac.kr/skukr/353/subview.do', # 생활관 (10)
+            'https://www.sungkyul.ac.kr/skukr/354/subview.do', # 비교과 (11)
             ]
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all(), heartbeat_timeout=60)
@@ -234,22 +232,35 @@ async def check_notices():
             print("[ERROR 003] 성결대학교 게시물의 제목이나 URL을 받아오지 못했습니다.")
             #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n [ERROR 003] 성결대학교 게시물의 제목이나 URL을 받아오지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
+        # 2024-07-14 추가 : 바뀐 공지사항 갯수 확인
+        different_subject_cnt = 0 
         if attempt != 1 and cur_subjects[homepage_num] != before_subjects[homepage_num]:
+            for subject,url in cur_subjects[homepage_num]:
+                if (subject, url) not in before_subjects[homepage_num]:
+                    different_subject_cnt += 1
+
+        # 2024-07-14 추가 : 한 번에 바뀐 공지사항이 7개 이상인 경우는 적으므로 이런 경우 오류로 보고 디스코드에 알림을 보내지 않는다.
+        # 2024-07-14 추가 : 한 번에 바뀐 공지사항이 7개 미만인 경우에만 디스코드에 알림을 보내준다.
+        if attempt != 1 and cur_subjects[homepage_num] != before_subjects[homepage_num] and different_subject_cnt < 7:
             for subject,url in cur_subjects[homepage_num]:
                 if (subject, url) not in before_subjects[homepage_num]:
                     print(f"새로운 공지 제목 : {subject}")
                     print(f"새로운 공지 URL : {url.strip()}")
                     await channel.send(f'새로운 공지 제목 : {subject} \n {url.strip()}')
 
+
         before_subjects[homepage_num] = copy.deepcopy(cur_subjects[homepage_num])
         cur_subjects[homepage_num].clear()
         
         homepage_num += 1
-        if(homepage_num == 14):
-            homepage_num -= 14
+        if(homepage_num == 12):
+            homepage_num -= 12
 
-        await asyncio.sleep(random.uniform(5.0, 10.0))
+
+        await asyncio.sleep(random.uniform(7.0, 10.0))
 
     attempt += 1
+
+    
 
 bot.run(config['discord_token'])
