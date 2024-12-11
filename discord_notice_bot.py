@@ -1,6 +1,13 @@
-# 정상 서비스 진행중
-# undetected-chromedriver 3.0.6 버전
-# selenium 4.9 버전
+# 안정화 버전 (stable version - 20240818)
+
+# 이걸로 되는지 체크 오늘 밤 : nohup python3 20240523.py
+
+# undetected-chromedriver 3.5.5 버전 (pip show undetected-chromedriver)
+# selenium 4.23.1 버전 (pip show selenium)
+
+# Google Chrome 브라우저 버전 127.0.6533.119
+# ChromeDriver 버전 127.0.6533.119
+
 
 import chromedriver_autoinstaller
 import random
@@ -13,6 +20,7 @@ from discord.ext import commands, tasks
 import discord
 
 chromedriver_autoinstaller.install()
+
 # ========================================== config.json ===========================================
 import json
 
@@ -25,11 +33,13 @@ config = load_config()
 
 
 # ========================================== 변수 ===================================================
+# 테스트 서버
 # discord_token : 디스코드 토큰
 # channel_id : 디스코드 채널 아이디
 # local_computer_user_agent_txt_path : user-agent 15000개 데이터 txt파일이 저장된 공간 (local)
 # GCP_server_computer_user_agent_txt_path : user-agent 15000개 데이터 txt파일이 저장된 공간 (GCP server)
 # chromedriver_path : chromedriver 경로
+
 before_subjects = [[] for _ in range(14)] # 14개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
 cur_subjects = [[] for _ in range(14)]  # 14개의 2차원 빈 배열 초기화 [홈페이지 번째수][(게시글 제목, 게시글 url)]
 homepage_num = 0 # 현재 보고 있는 홈페이지 (0번이면 새소식 페이지 index)
@@ -126,10 +136,10 @@ def make_driver():
         options.add_argument("--no-first-run --no-service-autorun --password-store=basic")
         options.add_argument('--disable-logging')
         options.add_argument('--disable-popup-blocking')
-        # linux 환경에서 필요한 option
-        options.add_argument("--headless")
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
+        # linux 환경에서 필요한 option + 속도 개선
+        options.add_argument("--headless") # GUI 없이 실행
+        options.add_argument('--no-sandbox') # Browser가 보안 취약점에 노출될 가능성을 최소화하기 위해 사용되는 Sandbox 보호 기능을 해제(대신 속도 상승)
+        options.add_argument('--disable-dev-shm-usage') # 공유 메모리 파일 시스템 크기를 제한하지 않게 설정하는 것
 
         print("여기까지완료2")
         driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options)
@@ -189,18 +199,21 @@ async def on_ready():
     #     await channel.send(f'driver 없음')
     check_notices.start()
 
-@tasks.loop(minutes=15) 
+@tasks.loop(minutes=5) 
 async def check_notices():
     global homepage_num
     global attempt
-
     print(f"{attempt}번째 시도 중입니다.")
+    if driver is None :
+        await channel.send(f'driver가 없어졌어요 ㅠㅠ')
 
     for sku_site_link in sku_site_links:
         try:
             driver.get(sku_site_link)
-        except:
+        except Exception as e:
             print(f"[ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 띄우지 못했습니다.")
+            print(f"에러명은 아래와 같음")
+            print(f"{e}")
             #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n 에러 코드 : [ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 확인하지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
         driver.implicitly_wait(200)
