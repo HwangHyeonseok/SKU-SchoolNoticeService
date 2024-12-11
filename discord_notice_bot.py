@@ -1,4 +1,4 @@
-# 정상 서비스 진행중
+# TestServer 채널 운영 (테스트용)
 # undetected-chromedriver 3.0.6 버전
 # selenium 4.9 버전
 
@@ -13,6 +13,7 @@ from discord.ext import commands, tasks
 import discord
 
 chromedriver_autoinstaller.install()
+
 # ========================================== config.json ===========================================
 import json
 
@@ -97,7 +98,7 @@ def make_user_agent(ua, is_mobile):
 
 def read_agents():
     agents = []
-    f = open(config['GCP_server_computer_user_agent_txt_path'],"r",encoding="utf8")
+    f = open(config['local_computer_user_agent_txt_path'],"r",encoding="utf8")
     while True:
         line = f.readline()
         if not line:
@@ -132,7 +133,7 @@ def make_driver():
         options.add_argument('--disable-dev-shm-usage')
 
         print("여기까지완료2")
-        driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options)
+        driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options) # Linux chromedriver 경로 : /home/hhs0991/chromedriver-linux64/chromedriver
         print("여기까지완료3")
         UA_Data = make_user_agent(UA, True)
         print("여기까지완료4")
@@ -199,8 +200,10 @@ async def check_notices():
     for sku_site_link in sku_site_links:
         try:
             driver.get(sku_site_link)
-        except:
+        except Exception as e:
             print(f"[ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 띄우지 못했습니다.")
+            print(f"에러명은 아래와 같음")
+            print(f"{e}")
             #await channel.send(f'채팅 서버 개발자님 확인해 주세요! 봇이 너무 아파요 ㅜ_ㅜ \n 에러 코드 : [ERROR 001] 성결대학교 홈페이지 오류입니다. {sku_site_link} 페이지를 확인하지 못했습니다. \n 곧 채팅 서버 관리자가 나타나서 밤샘 작업을 하여 정상화할 예정이에요. 이용에 불편을 드려서 죄송합니다.')
 
         driver.implicitly_wait(200)
