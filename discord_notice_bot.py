@@ -21,6 +21,7 @@ import discord
 
 chromedriver_autoinstaller.install()
 
+
 # ========================================== config.json ===========================================
 import json
 
@@ -107,7 +108,7 @@ def make_user_agent(ua, is_mobile):
 
 def read_agents():
     agents = []
-    f = open(config['GCP_server_computer_user_agent_txt_path'],"r",encoding="utf8")
+    f = open(config['local_computer_user_agent_txt_path'],"r",encoding="utf8")
     while True:
         line = f.readline()
         if not line:
@@ -142,7 +143,7 @@ def make_driver():
         options.add_argument('--disable-dev-shm-usage') # 공유 메모리 파일 시스템 크기를 제한하지 않게 설정하는 것
 
         print("여기까지완료2")
-        driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options)
+        driver = uc.Chrome(executable_path=config['chromedriver_path'],options=options) # Linux chromedriver 경로 : /home/hhs0991/chromedriver-linux64/chromedriver
         print("여기까지완료3")
         UA_Data = make_user_agent(UA, True)
         print("여기까지완료4")
