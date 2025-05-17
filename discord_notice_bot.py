@@ -15,6 +15,7 @@
 
 # Google Chrome 브라우저 버전 128.0.6613.84 (google-chrome --version)
 # ChromeDriver 버전 128.0.6613.84 (cd chromedriver-linux64/ 후에 ./chromedriver --version)
+#
 # ---------------------------------------------
 import asyncio
 import aiohttp
