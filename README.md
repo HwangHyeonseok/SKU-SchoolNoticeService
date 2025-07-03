@@ -14,14 +14,15 @@ https://github.com/user-attachments/assets/6bb9dbb7-6b9c-44b9-920b-6786f2173b5d
 
 | **황현석** | **정윤지** |
 | :------: |  :------: |
-| [<img src="https://avatars.githubusercontent.com/HwangHyeonseok" height=150 width=150> <br/> @HwangHyeonseok](https://github.com/HwangHyeonseok) | [<img src="https://avatars.githubusercontent.com/yooonzi040" height=150 width=150> <br/> @yooonzi040](https://github.com/yooonzi040) |
+| [<img src="https://avatars.githubusercontent.com/HwangHyeonseok" height=150 width=150> <br/> @HwangHyeonseok](https://github.com/HwangHyeonseok)<br>서비스 기획<br>이해관계자(교직원) 커뮤니케이션<br>구현 및 배포, 유지운영 | [<img src="https://avatars.githubusercontent.com/yooonzi040" height=150 width=150> <br/> @yooonzi040](https://github.com/yooonzi040)<br>홍보용 카드뉴스 제작<br>대외 홍보<br>PPT 디자인 제작 |
 
 </div>
 
 <br>
 
 ## 개발 개요
-- 개발 기간 : 2024.03~2023.08
+- 개발 기간 : 2024.03~2024.08
+- 서비스 기간 : 2024.03.29~2025.05.17
 - 기술 스택
 <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
   <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
@@ -45,5 +46,5 @@ https://github.com/user-attachments/assets/6bb9dbb7-6b9c-44b9-920b-6786f2173b5d
 ## 성과
 |<img src="https://github.com/user-attachments/assets/a29f1111-55b6-424d-b23d-d380b5effd3b" alt="dalmuti_intro_logic" height="auto" width="500px"/>|<img src="https://github.com/user-attachments/assets/7fbd92f2-1f50-40de-9e54-7105d8d4a3b4" alt="user_cnt_img" height="auto" width="500px"/>|<img src="https://github.com/user-attachments/assets/7ecb33d6-34e7-40bc-bff4-53885b8d0518" alt="development_document" height="auto" width="500px"/>|
 |:---:|:---:|:---:|
-|2024-1 창의문제해결 프로젝트 총장상|사용자 수 264명|45장의 개발문서|
+|2024-1 창의문제해결 프로젝트 총장상(상금 100만원, 지원금 60만원)|사용자 수 264명|45장의 개발문서|
 
