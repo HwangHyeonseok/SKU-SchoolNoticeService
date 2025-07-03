@@ -31,19 +31,27 @@ https://github.com/user-attachments/assets/6bb9dbb7-6b9c-44b9-920b-6786f2173b5d
   <img src="https://img.shields.io/badge/google%20cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white">
 </div>
 
+## 💡 기획 계기
+- 대학 입장 : 비교과 프로그램 홍보에 비용 발생 (SMS, 카카오톡 알림 1회 당 8~80원)
+- 학생 입장 : 매번 홈페이지에 들어가서 공지를 확인하는 것이 번거롭다는 문제
+![develop_motivation](https://github.com/user-attachments/assets/fe70fb42-f0bd-43a7-9a9a-b45515f34f6d)
+
+## 기획 고려사항
+- 여기서부터 작성
+
+
 ## 시스템 아키텍처
 ![architecture](https://github.com/user-attachments/assets/416ac74b-c5f7-4425-b90c-aafcc03b9d2f)
-
-## 실제 디스코드 알림 화면
-|<img src="https://github.com/user-attachments/assets/b79f4279-434b-4c22-800a-690c6255bb08" alt="mobile_alert" height="auto" width="600px" />|<img src="https://github.com/user-attachments/assets/8359d44e-bc7e-488c-a04a-18600eb7e8a0" alt="dalmuti_ingame" height="auto" width="600px" />|
-|:---:|:---:|
-|mobile|PC|
 
 ## 주요 기능
 ### 공지사항 크롤링 및 알림
 - 새로운 공지사항을 크롤링하여 Discord 채널로 알림을 보냅니다.
 
-## 성과
+|<img src="https://github.com/user-attachments/assets/b79f4279-434b-4c22-800a-690c6255bb08" alt="mobile_alert" height="auto" width="600px" />|<img src="https://github.com/user-attachments/assets/8359d44e-bc7e-488c-a04a-18600eb7e8a0" alt="dalmuti_ingame" height="auto" width="600px" />|
+|:---:|:---:|
+|mobile|PC|
+
+## 🏆 성과
 |<img src="https://github.com/user-attachments/assets/a29f1111-55b6-424d-b23d-d380b5effd3b" alt="dalmuti_intro_logic" height="auto" width="500px"/>|<img src="https://github.com/user-attachments/assets/7fbd92f2-1f50-40de-9e54-7105d8d4a3b4" alt="user_cnt_img" height="auto" width="500px"/>|<img src="https://github.com/user-attachments/assets/7ecb33d6-34e7-40bc-bff4-53885b8d0518" alt="development_document" height="auto" width="500px"/>|
 |:---:|:---:|:---:|
 |2024-1 창의문제해결 프로젝트 총장상(상금 100만원, 지원금 60만원)|사용자 수 264명|45장의 개발문서|
